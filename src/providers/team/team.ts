@@ -26,7 +26,7 @@ export class TeamProvider {
     }
   }
   removeAllPlayers(){
-    this.teams = [[],[],[]];
+    this.teams = [[{id:-1,name:'No Team'}],[],[]];
   }
   getAllPlayers(){
     var playersArray = [];
