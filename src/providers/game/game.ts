@@ -10,7 +10,8 @@ import { Output }  from '@angular/core';
 export class GameProvider {
   private currentHole = 0;
   private holes = [1,2,3,4,5,6,7,8,9];
-  private score = [];
+  @Output() score = [];
+  @Output() longestDrive = [{name:''}];
   @Output() score1;
   @Output() score2;
 
@@ -20,7 +21,6 @@ export class GameProvider {
   }
 
   getCurrentHole(){
-    console.log(this.currentHole);
     return this.holes[this.currentHole];
   }
   nextCurrentHole(increment:number = 1){
@@ -41,8 +41,9 @@ export class GameProvider {
     }
   }
 
-  setScore(hole:number,team){
+  setScore(hole:number,team, longestDrivePlayer=null){
     this.score[hole] = team;
+    this.longestDrive[hole] = longestDrivePlayer;
     this.getTeamScores();
   }
   getTeamScores(){
@@ -60,14 +61,22 @@ export class GameProvider {
   }
 
   checkTeamWonLast3Holes(){
-    var startIndex = this.currentHole-1;
+    var startIndex = this.currentHole;
     if(startIndex in this.score){
+      var startIndex = this.currentHole-1;
       var tempTeam = this.score[startIndex];
       var returnRes = tempTeam > 0;
       for(var i=0; i<=2; i++){
         returnRes = returnRes && tempTeam == this.score[startIndex+i];
       }
       return returnRes;
+    }
+    return false;
+  }
+  checkLongestDrive(){
+    var startIndex = this.currentHole;
+    if(this.longestDrive[startIndex] == this.longestDrive[startIndex+1]){
+      return this.longestDrive[startIndex];
     }
     return false;
   }

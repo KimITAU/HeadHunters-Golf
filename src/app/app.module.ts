@@ -9,6 +9,7 @@ import { ListPage } from '../pages/list/list';
 import { PlayerDetailPage } from '../pages/player-detail/player-detail';
 import { TeamPage } from '../pages/team/team';
 import { GamePage } from '../pages/game/game';
+import { InfoPage } from '../pages/info/info';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,7 +23,8 @@ import { GameProvider } from '../providers/game/game';
     ListPage,
     TeamPage,
     PlayerDetailPage,
-    GamePage
+    GamePage,
+    InfoPage
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import { GameProvider } from '../providers/game/game';
     ListPage,
     PlayerDetailPage,
     TeamPage,
-    GamePage
+    GamePage,
+    InfoPage
   ],
   providers: [
     StatusBar,

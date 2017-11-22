@@ -13,7 +13,7 @@ import { GamePage } from '../pages/game/game';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = GamePage;
+  rootPage: any = TeamPage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -23,8 +23,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Team', component: TeamPage },
-      { title: 'Players', component: ListPage },
-      { title: 'Game', component: GamePage }
+      { title: 'Players', component: ListPage }
     ];
 
   }

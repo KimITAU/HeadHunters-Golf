@@ -16,6 +16,7 @@ export class TeamProvider {
 
   }
   addPlayer(team,player){
+    console.log(player);
     this.teams[team].push(player);
   }
   removePlayer(team,player){
@@ -23,6 +24,9 @@ export class TeamProvider {
     if(indexOfItem > -1){
      this.teams[team].splice(indexOfItem,1);
     }
+  }
+  removeAllPlayers(){
+    this.teams = [[],[],[]];
   }
   getAllPlayers(){
     var playersArray = [];
@@ -34,6 +38,21 @@ export class TeamProvider {
       })
     });
     return playersArray;
+  }
+  getTeamPlayers(team:number){
+    var playersArray = [];
+    this.teams[team].forEach(function(player){
+      playersArray.push(player);
+    })
+    return playersArray;
+  }
+  getTeamPlayerNames(team:number){
+    var playersArray = this.getTeamPlayers(team);
+    var returnString = '';
+    playersArray.forEach(function(player){
+      returnString += player.name + ' ';
+    });
+    return returnString;
   }
 
 }

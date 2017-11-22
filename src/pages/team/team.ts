@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { GamePage } from '../game/game';
 import { PlayerProvider } from '../../providers/player/player';
 import { TeamProvider } from '../../providers/team/team';
 /**
@@ -29,7 +30,15 @@ export class TeamPage {
   }
 
   saveTeams(form){
+    this.teamProvider.removeAllPlayers();
+    var player1 = this.playerPro.getPlayer(this.team1.player1);
+    console.log(this.team1.player1);
+    this.teamProvider.addPlayer(1,this.playerPro.getPlayer(parseInt(this.team1.player2)));
+    this.teamProvider.addPlayer(1,this.playerPro.getPlayer(parseInt(this.team1.player1)));
+    this.teamProvider.addPlayer(2,this.playerPro.getPlayer(parseInt(this.team2.player1)));
+    this.teamProvider.addPlayer(2,this.playerPro.getPlayer(parseInt(this.team2.player2)));
 
+    this.navCtrl.push(GamePage);
   }
 
 }

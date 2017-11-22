@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
-import { ListPage } from '../list/list';
+import { InfoPage } from '../info/info';
 import { GameProvider } from '../../providers/game/game';
 import { PlayerProvider } from '../../providers/player/player';
+import { TeamProvider } from '../../providers/team/team';
 import { AlertController } from 'ionic-angular';
+import { ListPage } from '../list/list';
 /**
  * Generated class for the GamePage page.
  *
@@ -24,11 +26,14 @@ export class GamePage {
   players = [];
   longestDrive;
   private teamColor = ['#eee','#00f','#f00'];
+  team1Players;
+  team2Players;
 
-  constructor(public playerProvider: PlayerProvider,public alertCtrl: AlertController,public gameProvider: GameProvider,public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
-    this.players = this.playerProvider.getRows();
-    console.log(this.players);
-    this.longestDrive = {id:1,name:'john'};
+  constructor(public playerProvider: PlayerProvider,public teamProvider:TeamProvider,public alertCtrl: AlertController,public gameProvider: GameProvider,public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
+    this.players = this.teamProvider.getAllPlayers();
+    this.team1Players = this.teamProvider.getTeamPlayerNames(1);
+    this.team2Players = this.teamProvider.getTeamPlayerNames(2);
+    this.longestDrive = 1;
     this.hole = gameProvider.getCurrentHole();
   }
 
@@ -36,29 +41,47 @@ export class GamePage {
   }
 
   showPopover(){
-    console.log('show poperver');
-    let popover = this.popoverCtrl.create(ListPage);
-    console.log(popover);
+    let popover = this.popoverCtrl.create(InfoPage);
     popover.present();
-    console.log('show popover end');
   }
 
   addHole(increment){
     this.hole = this.gameProvider.nextCurrentHole(increment);
   }
   setScore(team:number){
-    this.backgroundColor[this.hole-1] = this.teamColor[team];
-    this.gameProvider.setScore(this.hole,team);
-    if(this.gameProvider.checkTeamWonLast3Holes()){
-      this.showAlert('Team')
+
+    //check that longest Drive has been set
+    if(!this.longestDrive){
+      this.showAlertNoLongestDrive();
+      return;
     }
+
+    this.backgroundColor[this.hole-1] = this.teamColor[team];
+    this.gameProvider.setScore(this.hole,team, this.playerProvider.getPlayer(parseInt(this.longestDrive)));
+
+    if(this.gameProvider.checkTeamWonLast3Holes()){
+      this.showAlert('Team',' for winning 3 consecutive holes');
+    }
+    var longestDriveCheck = this.gameProvider.checkLongestDrive()
+    if(longestDriveCheck){
+      this.showAlert(longestDriveCheck.name,' for 2 consecutive longest drives')
+    }
+    this.longestDrive = null;
     this.addHole(1);
   }
 
-  showAlert(name) {
+  showAlert(name, reason='') {
     let alert = this.alertCtrl.create({
       title: 'Remove Club',
-      subTitle: name+' needs to have a club removed',
+      subTitle: name+' needs to have a club removed '+reason,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+  showAlertNoLongestDrive() {
+    let alert = this.alertCtrl.create({
+      title: 'Longest Drive',
+      subTitle: 'Please select the player with the longest drive',
       buttons: ['OK']
     });
     alert.present();

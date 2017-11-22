@@ -17,6 +17,16 @@ export class PlayerProvider {
     this.i = 5;
   }
 
+  getPlayer(id:number){
+    var returnPlayer = false;
+    this.players.forEach(function(player){
+      if(player.id === id){
+        returnPlayer = player;
+      }
+    });
+    return returnPlayer;
+  }
+
   getRows(){
     return this.players;
   }
