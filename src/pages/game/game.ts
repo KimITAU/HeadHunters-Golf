@@ -25,7 +25,7 @@ export class GamePage {
   backgroundColor=['#eee','#eee','#eee','#eee','#eee','#eee','#eee','#eee','#eee'];
   players = [];
   longestDrive;
-  private teamColor = ['#eee','#00f','#f00'];
+  private teamColor = ['#aaa','#00f','#f00'];
   team1Players;
   team2Players;
 
