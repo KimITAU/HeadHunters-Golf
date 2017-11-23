@@ -10,51 +10,57 @@ import { Storage } from '@ionic/storage';
 @Injectable()
 export class AuthenticationProvider {
   token :string;
+  username:string;
+  password:string;
 
   private apiHost;
   private apiHostAuthetication;
     constructor(public http: HttpClient,private storage: Storage) {
       this.apiHostAuthetication = 'http://headhunters.uziwa.com/wp-json/jwt-auth/v1/token';
       this.apiHost = 'http://headhunters.uziwa.com/wp-json/wp/v2/posts';
+      this.username = 'headhunters';
+      this.password = 'headhunters';
     }
 
     isAuthenticated(){
-      return  this.token;
-        /*
       return new Promise(resolve=>{
-          this.storage.get('auth.token').then((val) => {
-            if(val!==null){
-              console.log(val);
-              resolve(true)}
-              else{
-                resolve(false);
-              }
-            });
-          });*/
+        if(this.token){
+          resolve(true);
+        }
+        else{
+          this.login(this.username, this.password).then((data)=>{
+            console.log("timing");
+            resolve(true);
+          });
+        }
+
+      });
+
     }
 
     login(username:string, password: string){
-      this.http.post( this.apiHostAuthetication, {
-          username: username,
-          password: password
-        })
-        .subscribe((data)=>{
-          if('token' in data){
-            this.storage.set('auth.token',data['token']);
-            this.storage.get('auth.token').then((val) => {
-              this.token = val;
-            console.log('Your token is', val)});
-          }else{
-            console.log(data);
-            console.log('token not found');
-          }
-
+      return new Promise(resolve=>{
+        this.http.post( this.apiHostAuthetication, {
+            username: username,
+            password: password
+          })
+          .subscribe((data)=>{
+            if('token' in data){
+              this.token = data['token']
+              console.log(this.token);
+              console.log('authenticated');
+              resolve(true);
+            }else{
+              console.log(data);
+              console.log('token not found');
+              resolve(false)}
+            });
         });
     }
 
     uploadPost(data:string){
       console.log('upload post');
-      let body = { "title": "test", "content": "abc123","status":"publish" };
+      let body = { "title": "Scores Posted", "content": data,"status":"publish" };
       let headers = new HttpHeaders();
       //headers = headers.set('Content-Type', 'application/json; charset=utf-8');
       headers = headers.set('Authorization','Bearer '+this.token)

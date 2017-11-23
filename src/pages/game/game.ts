@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
 import { InfoPage } from '../info/info';
-import { GameProvider } from '../../providers/game/game';
+import { FinishPage } from '../finish/finish';
 import { PlayerProvider } from '../../providers/player/player';
+import { GameProvider } from '../../providers/game/game';
 import { TeamProvider } from '../../providers/team/team';
 import { AlertController } from 'ionic-angular';
 import { ListPage } from '../list/list';
@@ -28,6 +29,7 @@ export class GamePage {
   private teamColor = ['#aaa','#00f','#f00'];
   team1Players;
   team2Players;
+  showUpload= false;
 
   constructor(public playerProvider: PlayerProvider,public teamProvider:TeamProvider,public alertCtrl: AlertController,public gameProvider: GameProvider,public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
     this.players = this.teamProvider.getAllPlayers();
@@ -58,7 +60,10 @@ export class GamePage {
 
     this.backgroundColor[this.hole-1] = this.teamColor[team];
     this.gameProvider.setScore(this.hole,team, this.playerProvider.getPlayer(parseInt(this.longestDrive)));
-
+    if(this.hole==9){
+      let popover = this.popoverCtrl.create(FinishPage);
+      popover.present();
+    }
     if(this.gameProvider.checkTeamWonLast3Holes()){
       this.showAlert('Team',' for winning 3 consecutive holes');
     }
@@ -67,6 +72,9 @@ export class GamePage {
       this.showAlert(longestDriveCheck.name,' for 2 consecutive longest drives')
     }
     this.longestDrive = null;
+
+
+
     this.addHole(1);
   }
 
@@ -87,7 +95,5 @@ export class GamePage {
     alert.present();
   }
 
-  uploadGame(){
-    this.gameProvider.uploadGameDetails();
-  }
+
 }

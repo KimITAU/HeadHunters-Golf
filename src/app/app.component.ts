@@ -6,7 +6,7 @@ import { HomePage } from '../pages/home/home';
 import { TeamPage } from '../pages/team/team';
 import { ListPage } from '../pages/list/list';
 import { GamePage } from '../pages/game/game';
-
+import { FinishPage } from '../pages/finish/finish';
 @Component({
   templateUrl: 'app.html'
 })

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Output }  from '@angular/core';
 import { AuthenticationProvider } from '../authentication/authentication';
+import { TeamProvider } from '../team/team';
 /*
   Generated class for the GameProvider provider.
 
@@ -16,7 +17,7 @@ export class GameProvider {
   @Output() score1;
   @Output() score2;
 
-  constructor(private authProvider:AuthenticationProvider) {
+  constructor(private teamProvider:TeamProvider, private authProvider:AuthenticationProvider) {
     this.score1 = 0;
     this.score2 = 0;
   }
@@ -83,13 +84,24 @@ export class GameProvider {
   }
 
   uploadGameDetails(){
-    console.log('uploadGameDetails');
-    if(!this.authProvider.isAuthenticated()){
-      console.log('authenticating');
-      this.authProvider.login( 'headhunters','headhunters' );
-    }
-    console.log('upload details');
-    this.authProvider.uploadPost('thse are stuff');
+    var postContent = this.getGameDataViewable();
+    this.authProvider.isAuthenticated().then((data)=>{
+      this.authProvider.uploadPost(postContent);
+    });
+  }
 
+  getGameDataViewable(){
+    var returnString = '';
+    var winningTeamId = this.score1>this.score2 ? 1 : this.score1==this.score2 ? 0 : 2;
+    var WinningTeam = this.teamProvider.getTeamPlayerNames(winningTeamId);
+
+    returnString += 'Team "'+ WinningTeam + '" won ' + '\r\n';
+    returnString += 'Scores were : Team "'+ this.teamProvider.getTeamPlayerNames(1) + '" won '+this.score1 + ' holes and Team "'+this.teamProvider.getTeamPlayerNames(2)+ '" won '+ this.score2 +' holes' + '\r\n'+ '\r\n'+ '\r\n';
+    returnString += 'Longest Drives ' + '\r\n';
+    this.longestDrive.forEach(function(player){
+      returnString += player.name+ '\r\n';
+    });
+
+    return returnString;
   }
 }

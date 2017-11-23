@@ -11,6 +11,7 @@ import { PlayerDetailPage } from '../pages/player-detail/player-detail';
 import { TeamPage } from '../pages/team/team';
 import { GamePage } from '../pages/game/game';
 import { InfoPage } from '../pages/info/info';
+import { FinishPage } from '../pages/finish/finish';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -26,7 +27,8 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     TeamPage,
     PlayerDetailPage,
     GamePage,
-    InfoPage
+    InfoPage,
+    FinishPage
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,8 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     PlayerDetailPage,
     TeamPage,
     GamePage,
-    InfoPage
+    InfoPage,
+    FinishPage
   ],
   providers: [
     StatusBar,
