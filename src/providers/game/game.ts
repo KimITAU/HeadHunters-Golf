@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Output }  from '@angular/core';
+import { AuthenticationProvider } from '../authentication/authentication';
 /*
   Generated class for the GameProvider provider.
 
@@ -15,7 +16,7 @@ export class GameProvider {
   @Output() score1;
   @Output() score2;
 
-  constructor() {
+  constructor(private authProvider:AuthenticationProvider) {
     this.score1 = 0;
     this.score2 = 0;
   }
@@ -79,5 +80,16 @@ export class GameProvider {
       return this.longestDrive[startIndex];
     }
     return false;
+  }
+
+  uploadGameDetails(){
+    console.log('uploadGameDetails');
+    if(!this.authProvider.isAuthenticated()){
+      console.log('authenticating');
+      this.authProvider.login( 'headhunters','headhunters' );
+    }
+    console.log('upload details');
+    this.authProvider.uploadPost('thse are stuff');
+
   }
 }

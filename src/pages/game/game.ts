@@ -86,4 +86,8 @@ export class GamePage {
     });
     alert.present();
   }
+
+  uploadGame(){
+    this.gameProvider.uploadGameDetails();
+  }
 }
